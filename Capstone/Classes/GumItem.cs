@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Capstone.Classes;
 
 namespace Capstone.Classes
 {
-    class GumItem
+    public class GumItem : VendingMachineItem
     {
+        public GumItem(string itemName, decimal price) : base(itemName, price)
+        {
+        }
+
+        public override string Consume()
+        {
+            return "Chew Chew, Yum!";
+        }
     }
 }
