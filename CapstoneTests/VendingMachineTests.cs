@@ -18,7 +18,7 @@ namespace CapstoneTests
             InventoryFileDAL testyThing = new InventoryFileDAL(filePath);
 
             VendingMachine testMachine = new VendingMachine();
-            
+
             Assert.AreEqual(5, testMachine.GetQuantityRemaining("A1"));
         }
 
@@ -26,7 +26,7 @@ namespace CapstoneTests
         public void PurchaseTestSHouldBe4ChipsLeft()
         {
             //string filePath;
-          //  string currentDirectory = Directory.GetCurrentDirectory();
+            //  string currentDirectory = Directory.GetCurrentDirectory();
             //filePath = Path.Combine(currentDirectory, "vendingmachineinventory.txt");
 
             //InventoryFileDAL testyThing = new InventoryFileDAL(filePath);
@@ -45,14 +45,64 @@ namespace CapstoneTests
         [TestMethod]
         public void FeedMoney()
         {
-            
+
             VendingMachine testMachine = new VendingMachine();
-            
+
             testMachine.FeedMoney(20);
             Assert.AreEqual(20, testMachine.CurrentBalance);
         }
 
+        [TestMethod]
+        public void ReturnChangeSets0Balance()
+        {
+            VendingMachine testMachine = new VendingMachine();
+            testMachine.FeedMoney(20);
+            // Assert.AreEqual(80, testMachine.ReturnChange().Quarters);
+            testMachine.ReturnChange();
+            Assert.AreEqual(0, testMachine.CurrentBalance);
+        }
 
+        [TestMethod]
+        public void ReturnChange80Quarters()
+        {
+            VendingMachine testMachine = new VendingMachine();
+            testMachine.FeedMoney(20);
+            Assert.AreEqual(80, testMachine.ReturnChange().Quarters);
+        }
+
+        [TestMethod]
+        public void WhenInput5DollarsPurchase3Dollar5CentsChipsReturnDollarNinetyFiveChangeWhichis7Quarts()
+        {
+            VendingMachine testMachine = new VendingMachine();
+            testMachine.FeedMoney(5);
+            testMachine.Purchase("A1");
+            Assert.AreEqual(7, testMachine.ReturnChange().Quarters);
+        }
+
+        [TestMethod]
+        public void WhenInput5DollarsPurchase3Dollar5CentsChipsReturnDollarNinetyFiveChangeWhichis2Dimes()
+        {
+            VendingMachine testMachine = new VendingMachine();
+            testMachine.FeedMoney(5);
+            testMachine.Purchase("A1");
+            Assert.AreEqual(2, testMachine.ReturnChange().Dimes);
+        }
+
+        [TestMethod]
+        public void TestIfPurchaseReturnsTheItem()
+        {
+            VendingMachine testMachine = new VendingMachine();
+            testMachine.FeedMoney(5);
+            Assert.AreEqual("Potato Crisps", testMachine.Purchase("A1").ItemName);
+        }
+
+        [TestMethod]
+        public void TestIfPurchaseAttemptIsNaughty()
+        {
+            VendingMachine testMachine = new VendingMachine();
+            testMachine.FeedMoney(5);
+            Assert.AreEqual(null, testMachine.Purchase("Q1"));
+        }
 
 
     }

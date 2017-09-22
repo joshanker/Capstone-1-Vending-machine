@@ -50,6 +50,7 @@
     <Compile Include="Classes\GumItem.cs" />
     <Compile Include="Classes\InventoryFileDAL.cs" />
     <Compile Include="Classes\VendingMachine.cs" />
+    <Compile Include="Classes\VendingMachineCLI.cs" />
     <Compile Include="Classes\VendingMachineItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
