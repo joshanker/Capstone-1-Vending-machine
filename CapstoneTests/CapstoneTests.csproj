@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ChangeTests.cs" />
     <Compile Include="InventoryFileDALTests.cs" />
+    <Compile Include="VendingMachineCLITests.cs" />
     <Compile Include="VendingMachineTests.cs" />
     <Compile Include="VendingMachineItemTests.cs" />
   </ItemGroup>

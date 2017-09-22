@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Capstone.Classes
 {
-    public class VendingMachine
+    public class VendingMachine 
     {
         private decimal currentBalance;
 
@@ -71,6 +71,15 @@ namespace Capstone.Classes
                     inventory[slotID].RemoveAt(0);
                     return inventory[slotID].First();
                 }
+                if (!StockExists)
+                {
+                    
+                }
+                if (!isRichEnough)
+                {
+                    //InsufficientFunds();
+                }
+
             }
             return null;
         }
@@ -106,7 +115,10 @@ namespace Capstone.Classes
             this.inventory = inventory;
         }
 
-
+        public decimal GetCostOfItem(string slotID)
+        {
+            return inventory[slotID][0].PriceInCents;
+        }
 
     }
 }
