@@ -39,8 +39,7 @@ namespace Capstone.Classes
 
         public Change(decimal amountInDollars)
         {
-            //do logic here to get the change.
-            //dollars are passed in.
+           
             amountInDollars = amountInDollars * 100;
 
             while (amountInDollars >= 25)

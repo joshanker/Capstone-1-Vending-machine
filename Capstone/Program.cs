@@ -14,6 +14,7 @@ namespace Capstone
             VendingMachine vm = new VendingMachine();
             VendingMachineCLI vmcli = new VendingMachineCLI(vm);
             vmcli.Run();
+            Environment.Exit(0);
         }
     }
 }

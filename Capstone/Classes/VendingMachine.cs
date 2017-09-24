@@ -17,7 +17,7 @@ namespace Capstone.Classes
             get { return this.currentBalance; }
         }
 
-        private Dictionary<string, List<VendingMachineItem>> inventory;
+        protected Dictionary<string, List<VendingMachineItem>> inventory;
 
 
 
@@ -69,16 +69,12 @@ namespace Capstone.Classes
                 {
                     this.currentBalance -= inventory[slotID].First().PriceInCents;
                     inventory[slotID].RemoveAt(0);
-                    return inventory[slotID].First();
+
+                    //return inventory[slotID].First();
+
+
                 }
-                if (!StockExists)
-                {
-                    
-                }
-                if (!isRichEnough)
-                {
-                    //InsufficientFunds();
-                }
+               
 
             }
             return null;
@@ -87,7 +83,7 @@ namespace Capstone.Classes
 
         public Change ReturnChange()
         {
-            Change customersChange = new Change(this.currentBalance);
+           Change customersChange = new Change(this.currentBalance);
             this.currentBalance = 0;
             return customersChange;
         }

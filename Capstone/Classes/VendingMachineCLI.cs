@@ -4,21 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Capstone.Classes;
-
+using System.IO;
+using Capstone.Exceptions;
 
 
 namespace Capstone.Classes
 {
-    public class VendingMachineCLI
+    public class VendingMachineCLI : VendingMachine
     {
 
-        private string Option_DisplatPurchaseMenu;
-        private string Option_DisplayVendingMachine;
-        private string Option_InsertMoney;
-        private string Option_MakeSelection;
-        private string Option_Quit;
-        private string Option_ReturnChange;
-        private string Option_ReturnToPreviousMenu;
         private VendingMachine vm;
 
         TransactionFileLog logger = new TransactionFileLog(" ");
@@ -38,12 +32,23 @@ namespace Capstone.Classes
             for (int i = 0; i < slots.Length; i++)
             {
 
+                if (vm.GetQuantityRemaining(slots[i]) > 0)
+                {
+                    decimal priceOfItem = vm.GetItemAtSlot(slots[i]).PriceInCents;
+                    string nameOfItem = vm.GetItemAtSlot(slots[i]).ItemName;
+                    int quantity = vm.GetQuantityRemaining(slots[i].ToString());
 
-                decimal priceOfItem = vm.GetItemAtSlot(slots[i]).PriceInCents;
-                string nameOfItem = vm.GetItemAtSlot(slots[i]).ItemName;
-                int quantity = vm.GetQuantityRemaining(slots[i].ToString());
+                    Console.WriteLine($"{slots[i].PadRight(2)} | {quantity.ToString().PadRight(2)}| {nameOfItem.PadRight(20)} |  {priceOfItem.ToString("C")}");
+                }
+                else
+                {
+                    decimal priceOfItem = 0.00M;
+                    string nameOfItem = "Sold out.";
+                    int quantity = 0;
 
-                Console.WriteLine($"{slots[i].PadRight(2)} | {quantity.ToString().PadRight(2)}| {nameOfItem.PadRight(20)} |  {priceOfItem.ToString("C")}");
+                    Console.WriteLine($"{slots[i].PadRight(2)} | {quantity.ToString().PadRight(2)}| {nameOfItem.PadRight(20)} |  {priceOfItem.ToString("C")}");
+                }
+
                 // Console.WriteLine($"{slots[i]}  {vm.GetItemAtSlot(slots[i]).ItemName} {vm.GetItemAtSlot(slots[i]).PriceInCents.ToString("C")}");
             }
 
@@ -56,16 +61,19 @@ namespace Capstone.Classes
 
             while (true)
             {
-            Console.WriteLine();
-            Console.WriteLine(" (1) Feed Me, Seymour" +
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("===========================================");
+                Console.WriteLine(" (1) Feed Me, Seymour" +
                     "\n (2) Select Product" + "\n (3) Finish Transaction");
-            string input = Console.ReadLine();
+                Console.WriteLine("===========================================");
+                string input = Console.ReadLine();
 
-            if(input == "1")
-            {
+                if (input == "1")
+                {
                     Console.WriteLine("Please feed Seymour some money (enter dollars 1 | 2 | 5 | 10)");
                     string moneyEntered = Console.ReadLine();
-                    if(moneyEntered == "1" || moneyEntered == "2" || moneyEntered == "5" || moneyEntered == "10")
+                    if (moneyEntered == "1" || moneyEntered == "2" || moneyEntered == "5" || moneyEntered == "10")
                     {
                         vm.FeedMoney(int.Parse(moneyEntered));
                         Console.WriteLine("Money added! Treat yo self!");
@@ -80,35 +88,108 @@ namespace Capstone.Classes
 
                 }
                 if (input == "2")
-            {
-                   
+                {
+
                     DisplayInventory();
                     Console.WriteLine("Please select your item using the slot ID");
                     string itemToVend = Console.ReadLine().ToUpper();
-                    bool weCanAffordIt = vm.GetCostOfItem(itemToVend) <= vm.CurrentBalance;
-                    if (vm.Slots.Contains(itemToVend) && weCanAffordIt)
+                    bool weCanAffordIt;
+                    try
                     {
-                        vm.Purchase(itemToVend); //if item is sold out or don't have enought money?
-                        decimal oldBalance = vm.CurrentBalance;
-                        Console.WriteLine($"Thanks for buying {vm.GetItemAtSlot(itemToVend).ItemName} - you have ${vm.CurrentBalance} left.");
-                        Console.WriteLine(vm.GetItemAtSlot(itemToVend).Consume());
-                        logger.RecordPurchase(vm.GetItemAtSlot(itemToVend).ItemName, itemToVend, oldBalance, vm.CurrentBalance);
+
+                        if (!inventory.ContainsKey(itemToVend))
+                        {
+                            throw new InvalidSlotIDException("That Slot ID doesn't exist.");
+
+                        }
+                        //weCanAffordIt = vm.GetCostOfItem(itemToVend) <= vm.CurrentBalance;
+
+
                     }
-                    else
+                    catch (InvalidSlotIDException ex)
                     {
-                        Console.WriteLine("Item does not exist. Are you sure you entered a slot ID? Try again!");
+                        Console.WriteLine(ex.Message);
+                        DisplayPurchaseMenu();
                     }
 
+
+
+                    try
+                    {
+                        //weCanAffordIt = vm.GetCostOfItem(itemToVend) <= vm.CurrentBalance;
+
+                        if (vm.GetQuantityRemaining(itemToVend) == 0)
+                        {
+                            throw new OutOfStockException("Sorry, that item is sold out!");
+                        }
+                    }
+                    catch (OutOfStockException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        DisplayPurchaseMenu();
+                    }
+
+
+                    try
+                    {
+                        weCanAffordIt = vm.GetCostOfItem(itemToVend) <= vm.CurrentBalance;
+                        if (!weCanAffordIt)
+                        {
+                            throw new InsufficientFundsException("Sorry, you can't afford that item.  Your balance is: " + vm.CurrentBalance.ToString("C") + ".");
+                        }
+                    }
+                    catch (InsufficientFundsException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        DisplayPurchaseMenu();
+                    }
+
+
+             
+
+                    decimal oldBalance = vm.CurrentBalance;
+                    Console.WriteLine($"Thanks for buying {vm.GetItemAtSlot(itemToVend).ItemName} - you have ${vm.CurrentBalance- vm.GetCostOfItem(itemToVend)} left.");
+                    Console.WriteLine(vm.GetItemAtSlot(itemToVend).Consume());
+                    logger.RecordPurchase(vm.GetItemAtSlot(itemToVend).ItemName, itemToVend, oldBalance, vm.CurrentBalance);
+
+                    vm.Purchase(itemToVend); //if item is sold out 
+                    
+
+                    
+                    
+                   
+
+
+                    //if (!vm.Slots.Contains(itemToVend))
+
+                    //if ((!vm.Slots.Contains(itemToVend)) && (itemToVend.Length != 2))
+                    //{
+                    //    Console.WriteLine("Item does not exist. Are you sure you entered a slot ID? Try again!");
+                    //}
+                    //if (!weCanAffordIt)
+                    //{
+                    //    Console.WriteLine("Sorry, you can't afford that item.  Your balance is: " + vm.CurrentBalance.ToString("C") + ".");
+                    //}
+
+
                 }
-            if(input == "3")
-            {
+                if (input == "3")
+                {
+                    logger.RecordCompleteTransaction(vm.CurrentBalance);
                     DisplayReturnedChange();
                     vm.ReturnChange();
-                    Console.WriteLine("Balance should be $0, your change should be printed.");
-                    logger.RecordCompleteTransaction(vm.CurrentBalance);
-            }
+                    Console.WriteLine("Balance is now $0; your change should be printed.");
+                    
+                    Run();
+                }
             }
         }
+
+
+      
+
+
+
 
         private void DisplayReturnedChange()
         {
@@ -133,14 +214,18 @@ namespace Capstone.Classes
 
         public void Run()
         {
-            while (true)
+            bool keepRunning = true;
+            while (keepRunning)
             {
                 PrintTitle();
-                Console.WriteLine(" (1) Display Vending Machine Items" +
-                    "\n (2) Purchase");
                 Console.WriteLine();
+                Console.WriteLine("===========================================");
+                Console.WriteLine(" (1) Display Vending Machine Items" +
+                    "\n (2) Purchase" + "\n (3) Exit");
+                Console.WriteLine("===========================================");
+
                 string input = Console.ReadLine();
-                
+
                 if (input == "1")
                 {
                     DisplayInventory();
@@ -148,6 +233,11 @@ namespace Capstone.Classes
                 if (input == "2")
                 {
                     DisplayPurchaseMenu();
+                }
+                if (input == "3")
+                {
+                    keepRunning = false;
+                    Environment.Exit(0);
                 }
 
             }
