@@ -19,12 +19,6 @@ namespace Capstone.Classes
 
         protected Dictionary<string, List<VendingMachineItem>> inventory;
 
-
-
-        // private InventoryFileDAL inventorySource= 
-        //private TransactionFileLog transactionLogger;
-
-        //private string[] slots;
         public string[] Slots
         {
             get { return this.inventory.Keys.ToArray(); }
@@ -69,9 +63,6 @@ namespace Capstone.Classes
                 {
                     this.currentBalance -= inventory[slotID].First().PriceInCents;
                     inventory[slotID].RemoveAt(0);
-
-                    //return inventory[slotID].First();
-
 
                 }
                

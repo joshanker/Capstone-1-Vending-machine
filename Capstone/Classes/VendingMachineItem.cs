@@ -27,7 +27,7 @@ namespace Capstone.Classes
         {
             this.itemName = itemName;
             this.priceInCents = price;
-            // Dont forget, this will eventually need to convert to cents. 
+
         }
 
     }

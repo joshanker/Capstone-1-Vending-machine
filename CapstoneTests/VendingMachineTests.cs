@@ -25,11 +25,6 @@ namespace CapstoneTests
         [TestMethod]
         public void PurchaseTestSHouldBe4ChipsLeft()
         {
-            //string filePath;
-            //  string currentDirectory = Directory.GetCurrentDirectory();
-            //filePath = Path.Combine(currentDirectory, "vendingmachineinventory.txt");
-
-            //InventoryFileDAL testyThing = new InventoryFileDAL(filePath);
 
             VendingMachine testMachine = new VendingMachine();
 
@@ -57,7 +52,6 @@ namespace CapstoneTests
         {
             VendingMachine testMachine = new VendingMachine();
             testMachine.FeedMoney(20);
-            // Assert.AreEqual(80, testMachine.ReturnChange().Quarters);
             testMachine.ReturnChange();
             Assert.AreEqual(0, testMachine.CurrentBalance);
         }

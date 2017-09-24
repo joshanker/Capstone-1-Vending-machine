@@ -20,7 +20,7 @@ namespace Capstone.Classes
         {
             Dictionary<string, List<VendingMachineItem>> inventory = new Dictionary<string, List<VendingMachineItem>>();
 
-            //FilePath = @"C:\Users\Joshua Anker\Desktop\c - module - 1 - capstone - team - 0\Capstone\vendingmachineInventory.txt";
+           
             string currentDirectory = Directory.GetCurrentDirectory();
             try
             {
@@ -41,7 +41,7 @@ namespace Capstone.Classes
                             for (int i = 0; i < 5; i++)
                             {
                                 ChipItem chips = new ChipItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(chips);//do 5 times
+                                vmiList.Add(chips);
                             }
 
                         }
@@ -52,7 +52,7 @@ namespace Capstone.Classes
                             for (int i = 0; i < 5; i++)
                             {
                                 CandyItem candy = new CandyItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(candy);//do 5 times
+                                vmiList.Add(candy);
                             }
 
                         }
@@ -63,7 +63,7 @@ namespace Capstone.Classes
                             for (int i = 0; i < 5; i++)
                             {
                                 BeverageItem bev = new BeverageItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(bev);//do 5 times
+                                vmiList.Add(bev);
                             }
 
                         }
@@ -75,7 +75,7 @@ namespace Capstone.Classes
                             for (int i = 0; i < 5; i++)
                             {
                                 GumItem gum = new GumItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(gum);//do 5 times
+                                vmiList.Add(gum);
                             }
 
                         }

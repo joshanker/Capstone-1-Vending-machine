@@ -49,7 +49,6 @@ namespace Capstone.Classes
                     Console.WriteLine($"{slots[i].PadRight(2)} | {quantity.ToString().PadRight(2)}| {nameOfItem.PadRight(20)} |  {priceOfItem.ToString("C")}");
                 }
 
-                // Console.WriteLine($"{slots[i]}  {vm.GetItemAtSlot(slots[i]).ItemName} {vm.GetItemAtSlot(slots[i]).PriceInCents.ToString("C")}");
             }
 
             Console.WriteLine("===========================================");
@@ -102,7 +101,6 @@ namespace Capstone.Classes
                             throw new InvalidSlotIDException("That Slot ID doesn't exist.");
 
                         }
-                        //weCanAffordIt = vm.GetCostOfItem(itemToVend) <= vm.CurrentBalance;
 
 
                     }
@@ -116,7 +114,6 @@ namespace Capstone.Classes
 
                     try
                     {
-                        //weCanAffordIt = vm.GetCostOfItem(itemToVend) <= vm.CurrentBalance;
 
                         if (vm.GetQuantityRemaining(itemToVend) == 0)
                         {
@@ -150,27 +147,10 @@ namespace Capstone.Classes
                     decimal oldBalance = vm.CurrentBalance;
                     Console.WriteLine($"Thanks for buying {vm.GetItemAtSlot(itemToVend).ItemName} - you have ${vm.CurrentBalance- vm.GetCostOfItem(itemToVend)} left.");
                     Console.WriteLine(vm.GetItemAtSlot(itemToVend).Consume());
-                    logger.RecordPurchase(vm.GetItemAtSlot(itemToVend).ItemName, itemToVend, oldBalance, vm.CurrentBalance);
+                    logger.RecordPurchase(vm.GetItemAtSlot(itemToVend).ItemName, itemToVend, oldBalance, vm.CurrentBalance-vm.GetCostOfItem(itemToVend));
 
-                    vm.Purchase(itemToVend); //if item is sold out 
+                    vm.Purchase(itemToVend);
                     
-
-                    
-                    
-                   
-
-
-                    //if (!vm.Slots.Contains(itemToVend))
-
-                    //if ((!vm.Slots.Contains(itemToVend)) && (itemToVend.Length != 2))
-                    //{
-                    //    Console.WriteLine("Item does not exist. Are you sure you entered a slot ID? Try again!");
-                    //}
-                    //if (!weCanAffordIt)
-                    //{
-                    //    Console.WriteLine("Sorry, you can't afford that item.  Your balance is: " + vm.CurrentBalance.ToString("C") + ".");
-                    //}
-
 
                 }
                 if (input == "3")
@@ -194,7 +174,6 @@ namespace Capstone.Classes
         private void DisplayReturnedChange()
         {
             Change bling = new Change(vm.CurrentBalance);
-            //vm.ReturnChange();
             Console.WriteLine("Here's your change:");
             Console.WriteLine($"{ bling.Quarters} quarters");
             Console.WriteLine($"{ bling.Dimes} dimes");

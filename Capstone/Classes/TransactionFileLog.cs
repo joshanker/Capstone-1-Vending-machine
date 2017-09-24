@@ -13,25 +13,30 @@ namespace Capstone.Classes
         private string filePath;
         string currentDirectory = Directory.GetCurrentDirectory();
 
-        public void RecordCompleteTransaction(decimal initialAmount)
-        {
-            //WriteTransaction($"{System.DateTime.Now} Change given {initialAmount}  | Current balance  $0.00");
-            WriteTransaction(System.DateTime.Now + "Change given".PadRight(15) +  initialAmount.ToString("C").PadRight(8) + "|" + "Current balance" + "$0.00");
 
-        }
 
         public void RecordDeposit(decimal depositAmount, decimal finalBalance)
         {
-            //WriteTransaction($"{System.DateTime.Now} Money Fed: {depositAmount}. Current balance: {finalBalance}");
-            WriteTransaction(System.DateTime.Now +  "Money Fed:".PadRight(15) + depositAmount. + "Current balance:".PadRight(8) + finalBalance);
+           
+            WriteTransaction(System.DateTime.Now + " Money Fed".PadRight(13) + " | " + "Balances: ".PadRight(22) + " | " + depositAmount.ToString("C") + " | " + finalBalance.ToString("C"));
         }
 
         public void RecordPurchase(string productName, string slotID, decimal initialBalance, decimal finalBalance)
         {
-            WriteTransaction($"{System.DateTime.Now} Purchase {slotID} {productName}: Initial Amount|Final Amount {initialBalance}|{finalBalance} ");
+           
+            WriteTransaction(System.DateTime.Now + " Purchase".PadRight(13) + " | " + slotID + " " + productName.PadRight(19) + " | " + initialBalance.ToString("C").PadRight(6) + " | " + finalBalance.ToString("C") );
+        }
+
+        public void RecordCompleteTransaction(decimal initialAmount)
+        {
+           
+            WriteTransaction(System.DateTime.Now + " Change given".PadRight(13) +  " | " + "Balances: ".PadRight(22) + " | " + initialAmount.ToString("C").PadRight(6) + " | " + "$0.00");
 
         }
-        
+
+      
+
+      
 
 
 
