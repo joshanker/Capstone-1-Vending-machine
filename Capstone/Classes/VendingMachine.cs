@@ -24,6 +24,11 @@ namespace Capstone.Classes
             get { return this.inventory.Keys.ToArray(); }
         }
 
+        public bool DoesVendingMachineContainSlot(string slot)
+        {
+            return this.inventory.ContainsKey(slot);
+        }
+
         public void FeedMoney(int dollars)
         {
             this.currentBalance = this.currentBalance + dollars;
@@ -52,6 +57,9 @@ namespace Capstone.Classes
 
         public VendingMachineItem Purchase(string slotID)
         {
+            // Check here to see if the slot is invalid - then throw the exception
+            // Check here to see if there is enough inventory - then throw the exception
+            // Check here to see if there is enough money - then throw the exception
 
             bool isValidSlot = inventory.ContainsKey(slotID);
             if (isValidSlot)

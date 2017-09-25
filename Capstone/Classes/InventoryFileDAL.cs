@@ -11,8 +11,8 @@ namespace Capstone.Classes
     public class InventoryFileDAL
     {
         private const int Cost = 2;
-        private string FilePath;
-        private int InitialQuantity;
+        private string filePath;
+        private const int InitialQuantity = 5;
         private const int Product = 1;
         private const int SlotID = 0;
 
@@ -21,64 +21,20 @@ namespace Capstone.Classes
             Dictionary<string, List<VendingMachineItem>> inventory = new Dictionary<string, List<VendingMachineItem>>();
 
            
-            string currentDirectory = Directory.GetCurrentDirectory();
+            //string currentDirectory = Directory.GetCurrentDirectory();
             try
             {
-                FilePath = Path.Combine(currentDirectory, "vendingmachineinventory.txt");
-                using (StreamReader sr = new StreamReader(FilePath))
+                //filePath = Path.Combine(currentDirectory, "vendingmachineinventory.txt");
+                using (StreamReader sr = new StreamReader(filePath))
                 {
 
                     while (!sr.EndOfStream)
                     {
                         string nextline = sr.ReadLine();
-                        List<VendingMachineItem> vmiList = new List<VendingMachineItem>();
-
+                        
                         string[] tempArray = nextline.Split('|');
 
-                        if(tempArray[SlotID].StartsWith("A"))
-                        {
-
-                            for (int i = 0; i < 5; i++)
-                            {
-                                ChipItem chips = new ChipItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(chips);
-                            }
-
-                        }
-
-                        if (tempArray[SlotID].StartsWith("B"))
-                        {
-
-                            for (int i = 0; i < 5; i++)
-                            {
-                                CandyItem candy = new CandyItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(candy);
-                            }
-
-                        }
-
-                        if (tempArray[SlotID].StartsWith("C"))
-                        {
-
-                            for (int i = 0; i < 5; i++)
-                            {
-                                BeverageItem bev = new BeverageItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(bev);
-                            }
-
-                        }
-
-
-                        if (tempArray[SlotID].StartsWith("D"))
-                        {
-
-                            for (int i = 0; i < 5; i++)
-                            {
-                                GumItem gum = new GumItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
-                                vmiList.Add(gum);
-                            }
-
-                        }
+                        List<VendingMachineItem> vmiList = ParseInventoryLine(tempArray);
 
                         inventory[tempArray[SlotID]] = vmiList;
                     }
@@ -95,9 +51,54 @@ namespace Capstone.Classes
             
         }
 
+        private List<VendingMachineItem> ParseInventoryLine(string[] tempArray)
+        {
+            List<VendingMachineItem> vmiList = new List<VendingMachineItem>();
+
+            if (tempArray[SlotID].StartsWith("A"))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    ChipItem chips = new ChipItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
+                    vmiList.Add(chips);
+                }
+            }
+
+            if (tempArray[SlotID].StartsWith("B"))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    CandyItem candy = new CandyItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
+                    vmiList.Add(candy);
+                }
+            }
+
+            if (tempArray[SlotID].StartsWith("C"))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    BeverageItem bev = new BeverageItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
+                    vmiList.Add(bev);
+                }
+            }
+
+
+            if (tempArray[SlotID].StartsWith("D"))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    GumItem gum = new GumItem(tempArray[Product], decimal.Parse(tempArray[Cost]));
+                    vmiList.Add(gum);
+                }
+            }
+
+            return vmiList;
+        }
+
+
         public InventoryFileDAL(string filepath)
         {
-             
+            this.filePath = filepath;
         }
 
 

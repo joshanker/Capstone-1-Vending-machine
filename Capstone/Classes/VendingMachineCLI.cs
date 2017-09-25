@@ -10,7 +10,7 @@ using Capstone.Exceptions;
 
 namespace Capstone.Classes
 {
-    public class VendingMachineCLI : VendingMachine
+    public class VendingMachineCLI// : VendingMachine
     {
 
         private VendingMachine vm;
@@ -97,10 +97,28 @@ namespace Capstone.Classes
                     Console.WriteLine("Please select your item using the slot ID");
                     string itemToVend = Console.ReadLine().ToUpper();
                     bool weCanAffordIt;
+
+                    //try
+                    //{
+                    //    decimal oldBalance = vm.CurrentBalance;
+                    //    Console.WriteLine($"Thanks for buying {vm.GetItemAtSlot(itemToVend).ItemName} - you have ${vm.CurrentBalance - vm.GetCostOfItem(itemToVend)} left.");
+                    //    Console.WriteLine(vm.GetItemAtSlot(itemToVend).Consume());
+                    //    logger.RecordPurchase(vm.GetItemAtSlot(itemToVend).ItemName, itemToVend, oldBalance, vm.CurrentBalance - vm.GetCostOfItem(itemToVend));
+
+                    //    vm.Purchase(itemToVend);
+
+                    //}
+                    //catch (VendingMachineException ex)
+                    //{
+                    //    Console.WriteLine(ex.Message);
+                    //    DisplayPurchaseMenu();
+                    //}
+
+
                     try
                     {
 
-                        if (!inventory.ContainsKey(itemToVend))
+                        if (!vm.DoesVendingMachineContainSlot(itemToVend))
                         {
                             throw new InvalidSlotIDException("That Slot ID doesn't exist.");
 
@@ -111,7 +129,7 @@ namespace Capstone.Classes
                     catch (InvalidSlotIDException ex)
                     {
                         Console.WriteLine(ex.Message);
-                        DisplayPurchaseMenu();
+                        continue;
                     }
 
 
@@ -163,8 +181,8 @@ namespace Capstone.Classes
                     DisplayReturnedChange();
                     vm.ReturnChange();
                     Console.WriteLine("Balance is now $0; your change should be printed.");
-                    
-                    Run();
+
+                    break;
                 }
             }
         }
