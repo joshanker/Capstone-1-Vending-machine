@@ -27,6 +27,7 @@ namespace Capstone.Classes
         private void DisplayInventory()
         {
             string[] slots = vm.Slots;
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
             Console.WriteLine("===========================================");
             for (int i = 0; i < slots.Length; i++)
@@ -53,6 +54,7 @@ namespace Capstone.Classes
 
             Console.WriteLine("===========================================");
             Console.WriteLine();
+            Console.ResetColor();
         }
 
         private void DisplayPurchaseMenu()
@@ -60,17 +62,19 @@ namespace Capstone.Classes
 
             while (true)
             {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("===========================================");
                 Console.WriteLine(" (1) Feed Me, Seymour" +
                     "\n (2) Select Product" + "\n (3) Finish Transaction");
                 Console.WriteLine("===========================================");
+                Console.ResetColor();
                 string input = Console.ReadLine();
 
                 if (input == "1")
                 {
-                    Console.WriteLine("Please feed Seymour some money (enter dollars 1 | 2 | 5 | 10)");
+                    Console.WriteLine("Please feed money into SnackBot (enter dollars 1 | 2 | 5 | 10)");
                     string moneyEntered = Console.ReadLine();
                     if (moneyEntered == "1" || moneyEntered == "2" || moneyEntered == "5" || moneyEntered == "10")
                     {
@@ -174,21 +178,34 @@ namespace Capstone.Classes
         private void DisplayReturnedChange()
         {
             Change bling = new Change(vm.CurrentBalance);
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Here's your change:");
             Console.WriteLine($"{ bling.Quarters} quarters");
             Console.WriteLine($"{ bling.Dimes} dimes");
             Console.WriteLine($"{ bling.Nickels} nickels");
             Console.WriteLine();
+            Console.ResetColor();
         }
 
         private void PrintTitle()
         {
-            Console.WriteLine("*******************************************");
-            Console.WriteLine("*******************************************");
-            Console.WriteLine("** WELCOME TO OUR CRAPPY VENDING MACHINE **");
-            Console.WriteLine("*******************************************");
-            Console.WriteLine("*******************************************");
-            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            var arr = new[]
+            {
+                 @"                    ::::::::    ::::    :::       :::        ::::::::    :::    :::    :::::::::     ::::::::    ::::::::::: 
+                   :+:    :+:   :+:+:   :+:     :+: :+:     :+:    :+:   :+:   :+:     :+:    :+:   :+:    :+:       :+:     
+                   +:+          :+:+:+  +:+    +:+   +:+    +:+          +:+  +:+      +:+ +:+      +:+    +:+       +:+
+                   +#++:++#++   +#+ +:+ +#+   +#++:++#++:   +#+          +#++:++       +#++:++#+    +#+    +:+       +#+     
+                          +#+   +#+  +#+#+#   +#+     +#+   +#+          +#+  +#+      +#+    +#+   +#+    +#+       +#+     
+                   #+#    #+#   #+#   #+#+#   #+#     #+#   #+#    #+#   #+#   #+#     #+#    #+#   #+#    #+#       #+#     
+                    ########    ###    ####   ###     ###    ########    ###    ###    #########     ########        ###     "
+            };
+            Console.WindowWidth = 160;
+            Console.WriteLine("\n\n");
+            foreach (string line in arr)
+            Console.WriteLine(line);
+            Console.ResetColor();
+
         }
 
         public void Run()
@@ -197,11 +214,13 @@ namespace Capstone.Classes
             while (keepRunning)
             {
                 PrintTitle();
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine();
                 Console.WriteLine("===========================================");
                 Console.WriteLine(" (1) Display Vending Machine Items" +
                     "\n (2) Purchase" + "\n (3) Exit");
                 Console.WriteLine("===========================================");
+                Console.ResetColor();
 
                 string input = Console.ReadLine();
 
